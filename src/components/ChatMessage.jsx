@@ -9,7 +9,9 @@ const ChatMessage = ({ message }) => {
         gap: 'var(--spacing-md)',
         marginBottom: 'var(--spacing-lg)',
         flexDirection: isBot ? 'row' : 'row-reverse',
+        alignItems: 'flex-start',
         animation: 'fadeIn var(--transition-normal) forwards',
+        width: '100%',
     };
 
     const bubbleStyle = {
@@ -24,6 +26,8 @@ const ChatMessage = ({ message }) => {
         border: isBot ? '1px solid var(--color-border)' : 'none',
         borderBottomLeftRadius: isBot ? '0' : 'var(--radius-lg)',
         borderBottomRightRadius: !isBot ? '0' : 'var(--radius-lg)',
+        wordBreak: 'break-word',
+        whiteSpace: 'pre-wrap',
     };
 
     const iconContainerStyle = {

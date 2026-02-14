@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import ChatMessage from './ChatMessage';
 import Button from './Button';
 import { Send, Sparkles, Loader2, AlertCircle, Settings, CheckCircle } from 'lucide-react';
-import { analyzeWithGemini, setGeminiApiKey } from '../services/gemini';
+import { analyzeWithMistral, setMistralApiKey } from '../services/mistral';
 
 const ChatBot = ({ contextFiles = [] }) => {
     const [messages, setMessages] = useState([
@@ -12,7 +12,7 @@ const ChatBot = ({ contextFiles = [] }) => {
     const [isTyping, setIsTyping] = useState(false);
     const [error, setError] = useState(null);
     const [showSettings, setShowSettings] = useState(false);
-    const [apiKeyInput, setApiKeyInput] = useState(localStorage.getItem('VITE_GEMINI_API_KEY') || '');
+    const [apiKeyInput, setApiKeyInput] = useState(localStorage.getItem('VITE_MISTRAL_API_KEY') || '');
     const [keySaved, setKeySaved] = useState(false);
     const messagesEndRef = useRef(null);
 
@@ -25,7 +25,7 @@ const ChatBot = ({ contextFiles = [] }) => {
     }, [messages, isTyping]);
 
     const handleSaveKey = () => {
-        setGeminiApiKey(apiKeyInput);
+        setMistralApiKey(apiKeyInput);
         setKeySaved(true);
         setTimeout(() => setKeySaved(false), 2000);
     };
@@ -46,8 +46,8 @@ const ChatBot = ({ contextFiles = [] }) => {
         setIsTyping(true);
 
         try {
-            // Real API Call to Gemini
-            const aiResponse = await analyzeWithGemini(contextFiles, input);
+            // Real API Call to Mistral AI
+            const aiResponse = await analyzeWithMistral(contextFiles, input);
 
             const botMessage = {
                 id: Date.now() + 1,
@@ -59,7 +59,7 @@ const ChatBot = ({ contextFiles = [] }) => {
             setMessages(prev => [...prev, botMessage]);
         } catch (err) {
             console.error("Chat Error:", err);
-            setError(err.message || "Something went wrong while communicating with Gemini.");
+            setError(err.message || "Something went wrong while communicating with Mistral AI.");
 
             const errorMessage = {
                 id: Date.now() + 1,
@@ -107,13 +107,13 @@ const ChatBot = ({ contextFiles = [] }) => {
             {showSettings && (
                 <div style={{ padding: 'var(--spacing-md)', background: 'var(--color-bg-tertiary)', borderBottom: '1px solid var(--color-border)', animation: 'fadeIn 0.3s ease' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-                        <label style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', fontWeight: '600' }}>GEMINI API KEY</label>
+                        <label style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', fontWeight: '600' }}>MISTRAL API KEY</label>
                         <div style={{ display: 'flex', gap: 'var(--spacing-sm)' }}>
                             <input
                                 type="password"
                                 value={apiKeyInput}
                                 onChange={(e) => setApiKeyInput(e.target.value)}
-                                placeholder="AIza..."
+                                placeholder="Mistral API Key..."
                                 style={{
                                     flex: 1,
                                     background: 'var(--color-bg-secondary)',
@@ -156,13 +156,13 @@ const ChatBot = ({ contextFiles = [] }) => {
                 ))}
                 {isTyping && (
                     <div style={{ display: 'flex', gap: 'var(--spacing-sm)', alignItems: 'center', color: 'var(--color-text-muted)', fontSize: '0.875rem', marginTop: 'var(--spacing-md)' }}>
-                        <Loader2 size={14} className="animate-spin" /> Gemini is analyzing...
+                        <Loader2 size={14} className="animate-spin" /> Mistral AI is analyzing...
                     </div>
                 )}
                 <div ref={messagesEndRef} />
             </div>
 
-            {error && !error.includes("Gemini API Key") && (
+            {error && !error.includes("Mistral API Key") && (
                 <div style={{ padding: 'var(--spacing-sm) var(--spacing-md)', background: 'rgba(239, 68, 68, 0.1)', color: 'var(--color-error)', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
                     <AlertCircle size={14} />
                     <span>{error}</span>

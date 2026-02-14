@@ -226,7 +226,7 @@ const Dashboard = () => {
             </div>
 
             {/* Right Pane: AI Chatbot */}
-            <div className="chatbot-pane">
+            <div className="chatbot-pane" style={{ height: '100%', overflow: 'hidden' }}>
                 <ChatBot contextFiles={readyRawFiles} />
             </div>
         </div>
