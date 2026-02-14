@@ -4,7 +4,8 @@ import * as pdfjs from 'pdfjs-dist';
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 const getApiKey = () => {
-    return localStorage.getItem('VITE_MISTRAL_API_KEY') || import.meta.env.VITE_MISTRAL_API_KEY;
+    // Prioritize environment variable (inbuild) over local storage
+    return import.meta.env.VITE_MISTRAL_API_KEY || localStorage.getItem('VITE_MISTRAL_API_KEY');
 };
 
 export const setMistralApiKey = (key) => {
@@ -58,7 +59,7 @@ export async function analyzeWithMistral(files, prompt) {
     const messages = [
         {
             role: "system",
-            content: "You are a helpful assistant that analyzes documents and text. Extract key information and answer user queries accurately based on the provided content."
+            content: "You are a helpful assistant that analyzes documents and text. IMPORTANT: Structure your answers using numbered points in the format '1)', '2)', etc. ONLY for headings or main summary points. Use clear, plain text for all other descriptions. Do NOT use any other symbols, markdown formatting, or characters like '*', '#', '**', '-', or '_'."
         }
     ];
 

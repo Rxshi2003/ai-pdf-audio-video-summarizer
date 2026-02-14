@@ -87,12 +87,7 @@ const ChatBot = ({ contextFiles = [] }) => {
                             {contextFiles.length} files in context
                         </span>
                     )}
-                    <button
-                        onClick={() => setShowSettings(!showSettings)}
-                        style={{ color: showSettings ? 'var(--color-accent-primary)' : 'var(--color-text-muted)', padding: '6px', borderRadius: 'var(--radius-sm)', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                    >
-                        <Settings size={18} />
-                    </button>
+
                     <button
                         onClick={() => setMessages([{ id: Date.now(), text: "Chat cleared. How can I help you now?", sender: 'bot', timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }])}
                         style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem', padding: '4px 8px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', cursor: 'pointer', transition: 'all 0.2s' }}
@@ -104,52 +99,7 @@ const ChatBot = ({ contextFiles = [] }) => {
                 </div>
             </div>
 
-            {showSettings && (
-                <div style={{ padding: 'var(--spacing-md)', background: 'var(--color-bg-tertiary)', borderBottom: '1px solid var(--color-border)', animation: 'fadeIn 0.3s ease' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-                        <label style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', fontWeight: '600' }}>MISTRAL API KEY</label>
-                        <div style={{ display: 'flex', gap: 'var(--spacing-sm)' }}>
-                            <input
-                                type="password"
-                                value={apiKeyInput}
-                                onChange={(e) => setApiKeyInput(e.target.value)}
-                                placeholder="Mistral API Key..."
-                                style={{
-                                    flex: 1,
-                                    background: 'var(--color-bg-secondary)',
-                                    border: '1px solid var(--color-border)',
-                                    borderRadius: 'var(--radius-sm)',
-                                    padding: 'var(--spacing-xs) var(--spacing-sm)',
-                                    color: 'var(--color-text-primary)',
-                                    fontSize: '0.875rem'
-                                }}
-                            />
-                            <button
-                                onClick={handleSaveKey}
-                                style={{
-                                    background: keySaved ? 'var(--color-success)' : 'var(--color-accent-primary)',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: 'var(--radius-sm)',
-                                    padding: '4px 12px',
-                                    fontSize: '0.75rem',
-                                    fontWeight: '600',
-                                    transition: 'all 0.3s',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '4px'
-                                }}
-                            >
-                                {keySaved ? <><CheckCircle size={14} /> Saved</> : 'Save Key'}
-                            </button>
-                        </div>
-                        <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', margin: 0 }}>
-                            This key is stored only in your browser's local storage.
-                        </p>
-                    </div>
-                </div>
-            )}
-
+            {/* Removed manual API key settings as per user request to have it "inbuild" */}
             <div style={{ flex: 1, overflowY: 'auto', padding: 'var(--spacing-lg)' }}>
                 {messages.map(msg => (
                     <ChatMessage key={msg.id} message={msg} />
@@ -162,7 +112,7 @@ const ChatBot = ({ contextFiles = [] }) => {
                 <div ref={messagesEndRef} />
             </div>
 
-            {error && !error.includes("Mistral API Key") && (
+            {error && (
                 <div style={{ padding: 'var(--spacing-sm) var(--spacing-md)', background: 'rgba(239, 68, 68, 0.1)', color: 'var(--color-error)', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
                     <AlertCircle size={14} />
                     <span>{error}</span>
